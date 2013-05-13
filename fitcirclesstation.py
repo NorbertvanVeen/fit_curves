@@ -10,6 +10,7 @@ from scipy.optimize import fmin
 
 from scipy import pi,sin,cos
 
+
 def cost((x0, y0, a, b, phi)):
     Xe, Ye = f(x0, y0, a, b, phi)
     cost = 0
@@ -17,6 +18,7 @@ def cost((x0, y0, a, b, phi)):
     cost += min(distance_sq)
     return cost
 
+    
 def optimize_parameters(center,axes, phi ):
     
     p0 = (center[0], center[1], axes[0], axes[1], phi)
@@ -28,7 +30,6 @@ def optimize_parameters(center,axes, phi ):
     plt.plot(*f(*xopt))
 
     return xopt
-
 
 
 def ellipse(axes,center, phi):
@@ -43,6 +44,7 @@ def ellipse(axes,center, phi):
     Yb=radm*cos(the)*si+co*radn*sin(the)+ypos
     return Xb,Yb
 
+    
 def fitcircle(X,Y):
     xm = np.mean(X)
     ym = np.mean(Y)
@@ -61,10 +63,7 @@ def err((w,v,r)):
     
     
 if __name__ == '__main__':
-   
-        
-     
-    
+
      # handmatige data volgorde van oplopende x is belangrijk! station =>503 504 506
     # X = [72.3569, 96.50, 156.634, 194.037, 201.198]
     # Y = [177.312, 201.243, 211.949, 45.6931, 184.535]
@@ -84,7 +83,6 @@ if __name__ == '__main__':
         (x0 + a * cos(t) * cos(phi) - b * sin(t) * sin(phi),
          y0 + a * cos(t) * sin(phi) + b * sin(t) * cos(phi))
 
-    
     xopt = optimize_parameters(center, axes, phi)
     
     print "fit van Norbert", center, axes, phi
