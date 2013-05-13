@@ -10,8 +10,11 @@ from scipy.optimize import fmin
 
 from scipy import pi,sin,cos
 
+#werkt nog niet, werkend gedeelte zit opgesloten in selecteventscircle
 
-def cost((x0, y0, a, b, phi)):
+def cost(center, axes, phi):
+    x0, y0 = center
+    a, b = axes
     Xe, Ye = f(x0, y0, a, b, phi)
     cost = 0
     distance_sq = (Xe - x0) ** 2 + (Ye - y0) ** 2
@@ -31,17 +34,38 @@ def optimize_parameters(center,axes, phi ):
 
     return xopt
 
+    
+def find_Ellipse(x,y):
+    x = x[:,np.newaxis]
+    y = y[:,np.newaxis]
+    D =  np.hstack((x*x, x*y, y*y, x, y, np.ones_like(x)))
+    S = np.dot(D.T,D)
+    C = np.zeros([6,6])
+    C[0,2] = C[2,0] = 2; C[1,1] = -1
+    E, V =  linalg.eig(np.dot(linalg.inv(S), C))
+    n = np.argmax(np.abs(E))
+    a = V[:,n]
+    return a
 
+    
+def ellipse_center(a):
+    b,c,d,f,g,a = a[1]/2, a[2], a[3]/2, a[4]/2, a[5], a[0]
+    num = b*b-a*c
+    x0=(c*d-b*f)/num
+    y0=(a*f-b*d)/num
+    return np.array([x0,y0])
+
+    
 def ellipse(axes,center, phi):
-    Nb=50
-    xpos,ypos=center
-    radm,radn=axes
-    an=phi
+    Nb = 50
+    xpos,ypos = center
+    radm,radn = axes
+    an = phi
 
-    co,si=cos(an),sin(an)
-    the=linspace(0,2*pi,Nb)
-    Xb=radm*cos(the)*co-si*radn*sin(the)+xpos
-    Yb=radm*cos(the)*si+co*radn*sin(the)+ypos
+    co, si = cos(an), sin(an)
+    the = linspace(0,2*pi,Nb)
+    Xb = radm*cos(the)*co-si*radn*sin(the)+xpos
+    Yb = radm*cos(the)*si+co*radn*sin(the)+ypos
     return Xb,Yb
 
     
@@ -72,9 +96,11 @@ if __name__ == '__main__':
     X = [-249.032, -223.226, -172.903, -77.4194, 5.16]
     Y = [60.8856, -33.2103, -66.42, 171.587, 86.716]
     
-    center, phi, axes = ellipse(X, Y)
+    
+    center, phi, axes = find_Ellipse(X, Y)
     x1, y1 = ellipse(axes, center, phi)
     
+    punt
     
     xf, yf, rf = fitcircle(X,Y)
     

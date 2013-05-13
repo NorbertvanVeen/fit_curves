@@ -80,7 +80,7 @@ def draw_plot_N(data, n, stat1, stat2, stat3, tekst):
 if __name__ == '__main__':  
     n  = 3
     stat1 = 1
-    stat2 = 2
+    stat2 = 3
     stat3 = 6
     tekst = 'results-alt-feb-2012.h5'
     tcc = 10
