@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 
 def coin_stations(data, n):
    
-    coinc_ids = data.root.coincidences.coincidences.readWhere('N == n', field='id')
+    coinc_ids = data.root.coincidences.coincidences.readWhere('N == %d' %n, field='id')
     #id = coincidences['id'] #where coincidences of 3 stations are placed
     c_index = data.root.coincidences.c_index
     observ = data.root.coincidences.observables
